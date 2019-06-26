@@ -7,7 +7,9 @@ import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
 import org.dreambot.api.script.ScriptManifest;
 import org.dreambot.api.wrappers.interactive.GameObject;
+import org.dreambot.api.wrappers.interactive.NPC;
 import org.dreambot.api.wrappers.items.GroundItem;
+import org.dreambot.api.wrappers.items.Item;
 import org.dreambot.api.wrappers.widgets.message.Message;
 
 import javax.imageio.ImageIO;
@@ -76,11 +78,31 @@ public class MainClass extends AbstractScript {
                 case "Chaos Temple":
                     multiBury(new Area(3229, 3601, 3250, 3619));
                     break;
+                case "Banking":
+                    buryinBank(getBank().getClosestBankLocation().getCenter().getArea(3));
+                    break;
+                case "Current area":
+                    multiBury(new Area(0, 0, 0, 0));
+                    break;
             }
         }
         antiBan();
         return ((int) (Math.random() * 200));
     }
+    private void buryinBank(Area areana){
+        if(!getInventory().isEmpty()){
+            bury();
+            sleep(500, 1500);
+        }else{
+            if(areana.contains(getLocalPlayer())){
+                banking();
+            }else{
+                walkingtoarea(areana);
+            }
+        }
+    }
+
+
     private void multiBury(Area areana){
         if(getInventory().isFull()){
             bury();
@@ -131,6 +153,15 @@ public class MainClass extends AbstractScript {
         }
         return  "";
     }
+    private String checkBank(){
+        String[] Bones = {"Searing ashes", "Reinforced dragon bones", "Frost dragon bones", "Hardened dragon bones", "Ourg bones", "Ourg bones", "Airut bones", "Dagannoth bones", "Raurg bones","Tortured ashes", "Fayrg bones", "Dragon bones", "Infernal ashes", "Wyvern bones", "Baby dragon bones", "Shaikahan bones", "Zogre bones", "Jogre bones", "Big bones", "Accursed ashes", "Bat bones","Monkey bones", "Burnt bones", "Wolf bones", "Bones", "Impious ashesImpious ashes"};
+        for(int i = 0; i < Bones.length; i++) {
+            if (getBank().contains(Bones[i])){
+                return Bones[i];
+            }
+        }
+        return  "";
+    }
     private void bury(){
         activity = "Bury Bones";
         while(getInventory().contains(checkInvertory())){
@@ -149,8 +180,18 @@ public class MainClass extends AbstractScript {
                 getWalking().toggleRun();
             }
         }
-
+        if(getPlayers().localPlayer().getY() > 3515 && getPlayers().localPlayer().getY() < 3520){
+            WildernessJumping();
+        }
         sleep(100, 300);
+    }
+    private void WildernessJumping(){
+        activity = "Jump!";
+        GameObject gap = getGameObjects().closest("Wilderness Ditch");
+        gap.interact("Cross");
+        sleep(1000, 1500);
+        getWidgets().getWidget(475).getChild(11).interact();
+        sleep(100, 250);
     }
     private String dot(){
         long seconds = System.currentTimeMillis()/ 1000l;
@@ -168,6 +209,18 @@ public class MainClass extends AbstractScript {
         }
         second2 = System.currentTimeMillis()/ 1000l;
         return dot;
+    }
+    private void banking(){
+        activity = "Banking";
+        NPC banker = getNpcs().closest(npc -> npc != null && npc.hasAction("Bank"));
+        if (banker.interact("Bank")) {
+            if (sleepUntil(() -> getBank().open(), 9000)) {
+                getBank().withdraw(checkBank(), 28);
+                sleep(300, 500);
+                getBank().close();
+                sleep(200, 3000);
+            }
+        }
     }
     private void antiBan() {
         Random srand = new Random();
@@ -204,12 +257,14 @@ public class MainClass extends AbstractScript {
             log("Anti-ban: Open Random tab");
             sleep(200, 500);
         }else if(chances > 0.355 && chances < 0.360){
-            activity = "Anti-ban: Hop world";
-            log("Anti-ban: Hop world");
-            int[] freeworld = {301, 308, 316, 326, 335, 371, 379, 380, 381, 382, 383, 384, 385, 393, 394, 397, 398, 399, 413, 414, 418, 419, 425, 426, 427, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 451, 452, 453, 454, 455, 456, 457, 458, 459, 469, 470, 471, 472, 473, 474, 475, 476, 477, 497, 498, 499, 500, 501, 502, 503, 504};
-            getWorldHopper().hopWorld((freeworld[srand.nextInt(freeworld.length)])-300,getWorldHopper().openWorldHopper());
-            getWorldHopper().isWorldHopperOpen();
-            sleep(5000, 7000);
+            if(!getClient().isMembers()) {
+                activity = "Anti-ban: Hop world";
+                log("Anti-ban: Hop world");
+                int[] freeworld = {301, 308, 316, 326, 335, 371, 379, 380, 381, 382, 383, 384, 385, 393, 394, 397, 398, 399, 413, 414, 418, 419, 425, 426, 427, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 451, 452, 453, 454, 455, 456, 457, 458, 459, 469, 470, 471, 472, 473, 474, 475, 476, 477, 497, 498, 499, 500, 501, 502, 503, 504};
+                getWorldHopper().hopWorld((freeworld[srand.nextInt(freeworld.length)]) - 300, getWorldHopper().openWorldHopper());
+                getWorldHopper().isWorldHopperOpen();
+                sleep(5000, 7000);
+            }
         }
     }
 
