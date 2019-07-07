@@ -22,7 +22,7 @@ import java.util.Random;
 
 import static java.lang.Math.toIntExact;
 
-@ScriptManifest(category = Category.PRAYER, name = "Mogy holy Prayer", author = "Mogyiii", version = 1.0)
+@ScriptManifest(category = Category.PRAYER, name = "Mogy holy Prayer", author = "Mogyiii", version = 1.1)
 public class MainClass extends AbstractScript {
     private GUI.JWindow window;
     private boolean starter = false;
@@ -257,11 +257,16 @@ public class MainClass extends AbstractScript {
             log("Anti-ban: Open Random tab");
             sleep(200, 500);
         }else if(chances > 0.355 && chances < 0.360){
+            activity = "Anti-ban: Hop world";
+            log("Anti-ban: Hop world");
             if(!getClient().isMembers()) {
-                activity = "Anti-ban: Hop world";
-                log("Anti-ban: Hop world");
-                int[] freeworld = {301, 308, 316, 326, 335, 371, 379, 380, 381, 382, 383, 384, 385, 393, 394, 397, 398, 399, 413, 414, 418, 419, 425, 426, 427, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 451, 452, 453, 454, 455, 456, 457, 458, 459, 469, 470, 471, 472, 473, 474, 475, 476, 477, 497, 498, 499, 500, 501, 502, 503, 504};
-                getWorldHopper().hopWorld((freeworld[srand.nextInt(freeworld.length)]) - 300, getWorldHopper().openWorldHopper());
+                //int[] freeworld = {301, 308, 316, 326, 335, 371, 379, 380, 381, 382, 383, 384, 385, 393, 394, 397, 398, 399, 413, 414, 418, 419, 425, 426, 427, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 451, 452, 453, 454, 455, 456, 457, 458, 459, 469, 470, 471, 472, 473, 474, 475, 476, 477, 497, 498, 499, 500, 501, 502, 503, 504};
+                //getWorldHopper().hopWorld((freeworld[srand.nextInt(freeworld.length)]) - 300, getWorldHopper().openWorldHopper());
+                getWorldHopper().hopWorld(getWorlds().f2p().get(srand.nextInt(getWorlds().f2p().size())).getID(), getWorldHopper().openWorldHopper());
+                getWorldHopper().isWorldHopperOpen();
+                sleep(5000, 7000);
+            }else {
+                getWorldHopper().hopWorld(getWorlds().members().get(srand.nextInt(getWorlds().f2p().size())).getID(), getWorldHopper().openWorldHopper());
                 getWorldHopper().isWorldHopperOpen();
                 sleep(5000, 7000);
             }
