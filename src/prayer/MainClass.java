@@ -22,7 +22,7 @@ import java.util.Random;
 
 import static java.lang.Math.toIntExact;
 
-@ScriptManifest(category = Category.PRAYER, name = "Mogy holy Prayer", author = "Mogyiii", version = 1.1)
+@ScriptManifest(category = Category.PRAYER, name = "Mogy holy Prayer", author = "Mogyiii", version = 1.2)
 public class MainClass extends AbstractScript {
     private GUI.JWindow window;
     private boolean starter = false;
