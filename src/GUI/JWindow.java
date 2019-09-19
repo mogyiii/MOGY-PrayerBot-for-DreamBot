@@ -17,6 +17,7 @@ public class JWindow extends JFrame {
         initComponents();
     }
     private prayer.MainClass ctx;
+    private boolean wHop = false;
     public JWindow(MainClass main) {
         this.ctx = main;
         initComponents();
@@ -32,13 +33,27 @@ public class JWindow extends JFrame {
         ctx.setStarter(true);
         setVisible(false);
     }
-
+    private void checkBox2ActionPerformed(ActionEvent e) {
+        if(checkBox2.isSelected()){
+            wHop = true;
+        }else{
+            wHop = false;
+        }
+    }
+    public boolean getwhop(){
+        return wHop;
+    }
+    public int getAreaSize(){
+        return Integer.parseInt(textbox1.getText());
+    }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - kurva anyad
         comboBox1 = new JComboBox<>();
         button1 = new JButton();
-
+        label = new JLabel();
+        textbox1 = new JTextField();
+        checkBox2 = new JCheckBox();
         //======== this ========
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
@@ -50,14 +65,26 @@ public class JWindow extends JFrame {
             "Chaos Temple"
         }));
         contentPane.add(comboBox1);
-        comboBox1.setBounds(new Rectangle(new Point(120, 65), comboBox1.getPreferredSize()));
+        comboBox1.setBounds(new Rectangle(new Point(70, 80), comboBox1.getPreferredSize()));
 
         //---- button1 ----
         button1.setText("Start");
         button1.addActionListener(e -> button1ActionPerformed(e));
         contentPane.add(button1);
-        button1.setBounds(new Rectangle(new Point(145, 130), button1.getPreferredSize()));
-
+        button1.setBounds(new Rectangle(new Point(70, 140), button1.getPreferredSize()));
+        //---- textbox1 ----
+        textbox1.setText("8");
+        contentPane.add(textbox1);
+        textbox1.setBounds(70, 50, 50, button1.getPreferredSize().height);
+        //---- label2 ----
+        label.setText("Area Size");
+        contentPane.add(label);
+        label.setBounds(10, 55, label.getPreferredSize().width, 15);
+        //----- checkbox2
+        checkBox2.setText("Disable World-Hop");
+        checkBox2.addActionListener(e -> checkBox2ActionPerformed(e));
+        contentPane.add(checkBox2);
+        checkBox2.setBounds(new Rectangle(new Point(50, 110), checkBox2.getPreferredSize()));
         { // compute preferred size
             Dimension preferredSize = new Dimension();
             for(int i = 0; i < contentPane.getComponentCount(); i++) {
@@ -71,6 +98,7 @@ public class JWindow extends JFrame {
             contentPane.setMinimumSize(preferredSize);
             contentPane.setPreferredSize(preferredSize);
         }
+        contentPane.setPreferredSize(new Dimension(220, 190));
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -80,5 +108,8 @@ public class JWindow extends JFrame {
     // Generated using JFormDesigner Evaluation license - kurva anyad
     private JComboBox<String> comboBox1;
     private JButton button1;
+    private JTextField textbox1;
+    private JLabel label;
+    private JCheckBox checkBox2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

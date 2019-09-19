@@ -37,7 +37,10 @@ public class MainClass extends AbstractScript {
     private int burydBones = 0;
     private int i = 0;
     private Image mainpaint = getImage("https://i.imgur.com/9NAEERw.png");
+    private  boolean starting = true;
+    private int range = 5;
     //Area chaostemple = new Area(3231, 3617, 3248, 3600);
+    Area currentArea = new Area();
     @Override
     public void onStart() {
         super.onStart();
@@ -45,6 +48,7 @@ public class MainClass extends AbstractScript {
         window.setVisible(true);
         Startedlevelup = getSkills().getRealLevel(Skill.PRAYER);
         startTime = System.currentTimeMillis();
+        currentArea = new Area(getLocalPlayer().getX() -range,getLocalPlayer().getY() -range,getLocalPlayer().getX() +range,getLocalPlayer().getY()+range);
         log("Started!");
     }
     @Override
@@ -74,6 +78,11 @@ public class MainClass extends AbstractScript {
     @Override
     public int onLoop() {
         if(starter) {
+            if(starting){
+                range = window.getAreaSize();
+                currentArea = new Area(getLocalPlayer().getX() -range,getLocalPlayer().getY() -range,getLocalPlayer().getX() +range,getLocalPlayer().getY()+range);
+                starting= false;
+            }
             switch (window.getDo()) {
                 case "Chaos Temple":
                     multiBury(new Area(3229, 3601, 3250, 3619));
@@ -257,18 +266,18 @@ public class MainClass extends AbstractScript {
             log("Anti-ban: Open Random tab");
             sleep(200, 500);
         }else if(chances > 0.355 && chances < 0.360){
-            activity = "Anti-ban: Hop world";
-            log("Anti-ban: Hop world");
-            if(!getClient().isMembers()) {
-                //int[] freeworld = {301, 308, 316, 326, 335, 371, 379, 380, 381, 382, 383, 384, 385, 393, 394, 397, 398, 399, 413, 414, 418, 419, 425, 426, 427, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 451, 452, 453, 454, 455, 456, 457, 458, 459, 469, 470, 471, 472, 473, 474, 475, 476, 477, 497, 498, 499, 500, 501, 502, 503, 504};
-                //getWorldHopper().hopWorld((freeworld[srand.nextInt(freeworld.length)]) - 300, getWorldHopper().openWorldHopper());
-                getWorldHopper().hopWorld(getWorlds().f2p().get(srand.nextInt(getWorlds().f2p().size())).getID(), getWorldHopper().openWorldHopper());
-                getWorldHopper().isWorldHopperOpen();
-                sleep(5000, 7000);
-            }else {
-                getWorldHopper().hopWorld(getWorlds().members().get(srand.nextInt(getWorlds().f2p().size())).getID(), getWorldHopper().openWorldHopper());
-                getWorldHopper().isWorldHopperOpen();
-                sleep(5000, 7000);
+            if(!window.getwhop()) {
+                activity ="Anti-ban: Hop world";
+                log("Anti-ban: Hop world");
+                if (!getClient().isMembers()) {
+                    getWorldHopper().hopWorld(getWorlds().f2p().get(srand.nextInt(getWorlds().f2p().size())).getID(), getWorldHopper().openWorldHopper());
+                    getWorldHopper().isWorldHopperOpen();
+                    sleep(5000, 7000);
+                } else {
+                    getWorldHopper().hopWorld(getWorlds().members().get(srand.nextInt(getWorlds().f2p().size())).getID(), getWorldHopper().openWorldHopper());
+                    getWorldHopper().isWorldHopperOpen();
+                    sleep(5000, 7000);
+                }
             }
         }
     }
