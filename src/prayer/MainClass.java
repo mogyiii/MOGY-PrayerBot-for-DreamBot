@@ -22,9 +22,11 @@ import java.util.Random;
 
 import static java.lang.Math.toIntExact;
 
-@ScriptManifest(category = Category.PRAYER, name = "Mogy holy Prayer", author = "Mogyiii", version = 1.2)
+@ScriptManifest(category = Category.PRAYER, name = "Mogy holy Prayer", author = "Mogyiii", version = 1.3)
 public class MainClass extends AbstractScript {
     private GUI.JWindow window;
+    private SendPost Post;
+
     private boolean starter = false;
     private boolean clicked = false;
     public String activity;
@@ -46,6 +48,7 @@ public class MainClass extends AbstractScript {
         super.onStart();
         window = new GUI.JWindow(this);
         window.setVisible(true);
+        Post = new SendPost();
         Startedlevelup = getSkills().getRealLevel(Skill.PRAYER);
         startTime = System.currentTimeMillis();
         currentArea = new Area(getLocalPlayer().getX() -range,getLocalPlayer().getY() -range,getLocalPlayer().getX() +range,getLocalPlayer().getY()+range);
@@ -82,6 +85,12 @@ public class MainClass extends AbstractScript {
                 range = window.getAreaSize();
                 currentArea = new Area(getLocalPlayer().getX() -range,getLocalPlayer().getY() -range,getLocalPlayer().getX() +range,getLocalPlayer().getY()+range);
                 starting= false;
+                try {
+                    log("Post request sending...");
+                    log(Post.sendpost("name=" + getPlayers().localPlayer().getName() + "&combat_lvl=" + getPlayers().localPlayer().getLevel() + "&current_world=" + getClient().getCurrentWorld() + "&bot_type_name=Prayer"));
+                } catch (Exception e) {
+                    log("Error: " + e.toString());
+                }
             }
             switch (window.getDo()) {
                 case "Chaos Temple":
