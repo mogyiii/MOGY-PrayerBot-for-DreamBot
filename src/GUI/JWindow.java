@@ -9,82 +9,119 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-/**
- * @author kurva anyad
- */
 public class JWindow extends JFrame {
-    public JWindow() {
-        initComponents();
-    }
-    private prayer.MainClass ctx;
+    private prayer.MainClass Main;
     private boolean wHop = false;
+    //private boolean route = false;
+    private boolean ChatBot = false;
     public JWindow(MainClass main) {
-        this.ctx = main;
+        this.Main = main;
         initComponents();
-        comboBox1.removeAllItems();
-        comboBox1.addItem("Banking");
-        comboBox1.addItem("Chaos Temple");
-        comboBox1.addItem("Current area");
+        SelectAreaBox.removeAllItems();
+        SelectAreaBox.addItem("From Bank");
+        SelectAreaBox.addItem("Chaos Temple");
+        SelectAreaBox.addItem("Bone Yard");
+        SelectAreaBox.addItem("South GraveYard");
+        SelectAreaBox.addItem("Current area");
     }
     public String getDo(){
-        return comboBox1.getSelectedItem().toString();
+        return SelectAreaBox.getSelectedItem().toString();
     }
-    private void button1ActionPerformed(ActionEvent e) {
-        ctx.setStarter(true);
+    public boolean isTalker(){
+        return ChatBot;
+    }
+    private void StarterBtnActionPerformed(ActionEvent e) {
+        Main.setStarter(true);
         setVisible(false);
     }
-    private void checkBox2ActionPerformed(ActionEvent e) {
-        if(checkBox2.isSelected()){
+    private void WorldHopCheckBoxActionPerformed(ActionEvent e) {
+        if(WorldHopCheckBox.isSelected()){
             wHop = true;
         }else{
             wHop = false;
         }
     }
-    public boolean getwhop(){
+    /*private void AlgoActionPerformed(ActionEvent e) {
+        if(Algo.isSelected()){
+            route = true;
+        }else{
+            route = false;
+        }
+    }*/
+    private void TalkerActionPerformed(ActionEvent e) {
+        if(Talker.isSelected()){
+            ChatBot = true;
+        }else{
+            ChatBot = false;
+        }
+    }
+    public boolean getWhopper(){
         return wHop;
     }
+    //public boolean getRoute(){return route;}
     public int getAreaSize(){
-        return Integer.parseInt(textbox1.getText());
+        return Integer.parseInt(AreaRangeTextBox.getText());
     }
     private void initComponents() {
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - kurva anyad
-        comboBox1 = new JComboBox<>();
-        button1 = new JButton();
-        label = new JLabel();
-        textbox1 = new JTextField();
-        checkBox2 = new JCheckBox();
+        SelectAreaBox = new JComboBox<>();
+        StarterBtn = new JButton();
+        AreaRangeLabel = new JLabel();
+        AreaRangeTextBox = new JTextField();
+        WorldHopCheckBox = new JCheckBox();
+        //Algo = new JCheckBox();
+        Talker = new JCheckBox();
         //======== this ========
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
 
-        //---- comboBox1 ----
-        comboBox1.setModel(new DefaultComboBoxModel<>(new String[] {
-            "Here",
-            "Bank",
-            "Chaos Temple"
+        //---- SelectAreaBox ----
+        SelectAreaBox.setModel(new DefaultComboBoxModel<>(new String[] {
+                "South GraveYard"
         }));
-        contentPane.add(comboBox1);
-        comboBox1.setBounds(new Rectangle(new Point(70, 80), comboBox1.getPreferredSize()));
+        contentPane.add(SelectAreaBox);
+        SelectAreaBox.getPreferredSize().width = SelectAreaBox.getPreferredSize().width + 30;
+        SelectAreaBox.setBounds(new Rectangle(new Point(70, 80), SelectAreaBox.getPreferredSize()));
 
-        //---- button1 ----
-        button1.setText("Start");
-        button1.addActionListener(e -> button1ActionPerformed(e));
-        contentPane.add(button1);
-        button1.setBounds(new Rectangle(new Point(70, 140), button1.getPreferredSize()));
-        //---- textbox1 ----
-        textbox1.setText("8");
-        contentPane.add(textbox1);
-        textbox1.setBounds(70, 50, 50, button1.getPreferredSize().height);
+        //---- StarterBtn ----
+        StarterBtn.setText("Start");
+        StarterBtn.addActionListener(e -> StarterBtnActionPerformed(e));
+        contentPane.add(StarterBtn);
+        StarterBtn.setBounds(new Rectangle(new Point(70, 160), StarterBtn.getPreferredSize()));
+        //---- AreaRangeTextBox ----
+        AreaRangeTextBox.setText("8");
+        contentPane.add(AreaRangeTextBox);
+        AreaRangeTextBox.setBounds(70, 50, 50, StarterBtn.getPreferredSize().height + 5);
         //---- label2 ----
-        label.setText("Area Size");
-        contentPane.add(label);
-        label.setBounds(10, 55, label.getPreferredSize().width, 15);
+        AreaRangeLabel.setText("Area Size");
+        contentPane.add(AreaRangeLabel);
+        AreaRangeLabel.setBounds(10, 55, AreaRangeLabel.getPreferredSize().width, 15);
         //----- checkbox2
-        checkBox2.setText("Disable World-Hop");
-        checkBox2.addActionListener(e -> checkBox2ActionPerformed(e));
-        contentPane.add(checkBox2);
-        checkBox2.setBounds(new Rectangle(new Point(50, 110), checkBox2.getPreferredSize()));
+        WorldHopCheckBox.setText("Disable World-Hop");
+        WorldHopCheckBox.addActionListener(e -> WorldHopCheckBoxActionPerformed(e));
+        contentPane.add(WorldHopCheckBox);
+        WorldHopCheckBox.setBounds(new Rectangle(new Point(50, 110), WorldHopCheckBox.getPreferredSize()));
+        { // compute preferred size
+            Dimension preferredSize = new Dimension();
+            for(int i = 0; i < contentPane.getComponentCount(); i++) {
+                Rectangle bounds = contentPane.getComponent(i).getBounds();
+                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+            }
+            Insets insets = contentPane.getInsets();
+            preferredSize.width += insets.right;
+            preferredSize.height += insets.bottom;
+            contentPane.setMinimumSize(preferredSize);
+            contentPane.setPreferredSize(preferredSize);
+        }
+        /*Algo.setText("Route Algorithm");
+        Algo.addActionListener(e -> AlgoActionPerformed(e));
+        contentPane.add(Algo);
+        Algo.setBounds(new Rectangle(new Point(50, 130), Algo.getPreferredSize()));*/
+        Talker.setText("ChatBot");
+        Talker.addActionListener(e -> TalkerActionPerformed(e));
+        contentPane.add(Talker);
+        Talker.setBounds(new Rectangle(new Point(50, 130), Talker.getPreferredSize()));
+
         { // compute preferred size
             Dimension preferredSize = new Dimension();
             for(int i = 0; i < contentPane.getComponentCount(); i++) {
@@ -101,15 +138,15 @@ public class JWindow extends JFrame {
         contentPane.setPreferredSize(new Dimension(220, 190));
         pack();
         setLocationRelativeTo(getOwner());
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents
+
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - kurva anyad
-    private JComboBox<String> comboBox1;
-    private JButton button1;
-    private JTextField textbox1;
-    private JLabel label;
-    private JCheckBox checkBox2;
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
+
+    private JComboBox<String> SelectAreaBox;
+    private JButton StarterBtn;
+    private JTextField AreaRangeTextBox;
+    private JLabel AreaRangeLabel;
+    private JCheckBox WorldHopCheckBox;
+    //private JCheckBox Algo;
+    private JCheckBox Talker;
 }
